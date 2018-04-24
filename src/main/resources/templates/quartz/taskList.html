@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>定时任务调度平台</title>
+    <script type="text/javascript" src="../../static/js/jquery.js"></script>
+    <link rel="stylesheet" href="../../static/layui/css/layui.css" media="all">
+    <script src="../../static/layui/layui.all.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../common/common.js"></script>
+    <script src="../../static/js/task/taskList.js" type="text/javascript"></script>
+    <link rel="stylesheet" href="../../assets/css/font-awesome.min.css" media="all">
+    <link rel="stylesheet" href="../../css/bootstrap.min.css" media="all">
+</head>
+<body>
+<div class="ibox float-e-margins" style="margin-left: 20px;margin-right: 20px">
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend><h4 class="glyphicon glyphicon-user" id="pageName">任务列表</h4></legend>
+    </fieldset>
+    <div class="demoTable" style="text-align: center;margin-top: 20px">
+        <div class="layui-input-inline">
+            <select id="status" name="status" style="margin-left:0px;width:80px;" class="layui-input">
+                <option value="">请选择</option>
+                <option value="1">正常</option>
+                <option value="0">关闭</option>
+            </select>
+        </div>
+        <div class="layui-inline">
+            <input class="layui-input" name="name" style="width:200px" placeholder="请输入类名或方法名称" id="name"
+                   autocomplete="off">
+        </div>
+        <button class="layui-btn" onclick="taskList.init()" data-type="reload">搜索</button>
+    </div>
+    <button class="layui-btn layui-btn-radius layui-btn-normal" style="background-color: #1E9FFF;"
+            onclick="taskList.addPage()"><i class="layui-icon">&#xe608;</i>新增
+    </button>
+    <!-- <div class="layui-btn-group">
+       <button class="layui-btn">增加</button>
+       <button class="layui-btn ">编辑</button>
+       <button class="layui-btn">删除</button>
+    </div> -->
+    <table id="taskTable" lay-filter="demo"></table>
+</div>
+<script type="text/html" id="statusStyle">
+    {{# if(d.status == 1 ){ }}
+    <span class="label label-success">启用</span>
+    {{# } }}
+    {{# if(d.status == 0 ){ }}
+    <span class="label label-danger">关闭</span>
+    {{# } }}
+</script>
+<script type="text/html" id="optionsBtn">
+    <i class="layui-icon" id="run" lay-event="run">&#xe652;</i>&nbsp;&nbsp;&nbsp;&nbsp;
+    <i class="layui-icon" id="pause" lay-event="pause">&#xe651;</i>
+</script>
+<script type="text/html" id="taskBtn">
+    <a class="layui-btn layui-btn-mini layui-btn-normal" id="updateTask" lay-event="updateTask">修改</a>
+    <a class="layui-btn layui-btn-mini" id="deleteTask" lay-event="deleteTask">删除</a>
+</script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        taskList.init();//初始化页面数据
+    });
+</script>
+</body>
+</html>

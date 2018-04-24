@@ -12,5 +12,4 @@ public class SpringbootLearnApplicationTests {
 	@Test
 	public void contextLoads() {
 	}
-
 }

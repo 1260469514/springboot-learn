@@ -9,8 +9,15 @@ import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * @author wangzeying
+ * @version 1.0.0
+ * @desc druid监控配置类
+ * @date 2018/4/24 10:58:00
+ */
 @Configuration
-public class DruidConfiguration {
+public class DruidMonitorConfiguration {
+
     @Bean
     public ServletRegistrationBean druidStatViewServlet() {
         ServletRegistrationBean servletRegistrationBean = new ServletRegistrationBean(new StatViewServlet(), "/druid/*");

@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hackdog.springbootlearn.mapper.IQuartzJobMapper">
+    <sql id="fieldList">
+        job_id,
+        bean_name,
+        method_name,
+        params,
+        cron_expression,
+        status,
+        remark,
+        DATE_FORMAT(gmt_create, '%Y-%m-%d %H:%i:%s') as gmtCreateStr
+    </sql>
+
+    <sql id="page">
+        limit #{pageNum},#{pageSize}
+    </sql>
+
+    <sql id="queryCondition">
+        <trim prefix="WHERE" prefixOverrides="AND">
+            <if test="beanName != null and beanName != ''">
+                AND bean_name LIKE CONCAT('%',#{beanName},'%')
+            </if>
+            <if test="methodName != null and methodName != ''">
+                AND method_name LIKE CONCAT('%',#{methodName},'%')
+            </if>
+            <if test="remarks != null and remarks != ''">
+                AND remarks LIKE CONCAT('%',#{remarks},'%')
+            </if>
+            <if test="gmtCreate != null and gmtCreate != ''">
+                AND gmt_create = #{gmtCreate}
+            </if>
+            <if test="status != null">
+                AND status = #{status}
+            </if>
+        </trim>
+    </sql>
+
+    <select id="jobList" resultType="QuartzJob">
+        SELECT
+        <include refid="fieldList"/>
+        FROM
+        quartz_job
+        <include refid="queryCondition"/>
+    </select>
+
+    <select id="getJobListByParams" resultType="QuartzJob">
+        SELECT
+        <include refid="fieldList"/>
+        FROM
+        quartz_job
+        <include refid="queryCondition"/>
+    </select>
+
+    <select id="getJobsCount">
+        SELECT COUNT(*) FROM quartz_job
+        <include refid="queryCondition"/>
+    </select>
+
+    <select id="getJobById" parameterType="Long" resultType="QuartzJob">
+        SELECT
+        <include refid="fieldList"/>
+        FROM
+        quartz_job
+        WHERE job_id = #{jobId}
+    </select>
+
+    <insert id="addJob" parameterType="QuartzJob" useGeneratedKeys="true" keyProperty="jobId">
+        INSERT INTO
+        quartz_job (bean_name, method_name, params, cron_expression, status, remark, gmt_create)
+        VALUES (#{job.beanName},#{job.methodName},#{job.params},#{job.cronExpression},#{job.status},#{job.remark},NOW())
+    </insert>
+
+    <update id="updateJob" parameterType="QuartzJob">
+        UPDATE quartz_job
+        <set>
+            <if test="job.beanName != null">
+                bean_name = #{job.beanName},
+            </if>
+            <if test="job.methodName != null">
+                method_name = #{job.methodName},
+            </if>
+            <if test="job.params != null">
+                params = #{job.params},
+            </if>
+            <if test="job.cronExpression != null">
+                cron_expression = #{job.cronExpression},
+            </if>
+            <if test="job.status != null">
+                status = #{job.status},
+            </if>
+            gmt_modified = NOW()
+        </set>
+        WHERE job_id = #{job.jobId}
+    </update>
+
+    <update id="batchUpdateJobStatusByIds">
+        UPDATE quartz_job
+        SET status = #{status}
+        WHERE job_id IN
+        <foreach item="jobId" collection="jobIds" open="(" separator="," close=")">
+            #{jobId}
+        </foreach>
+    </update>
+
+    <delete id="batchRemoveJobByIds">
+        DELETE FROM quartz_job
+        WHERE job_id IN
+        <foreach item="jobId" collection="array" open="(" separator="," close=")">
+            #{jobId}
+        </foreach>
+    </delete>
+
+</mapper>
