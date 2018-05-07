@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hackdog.springbootlearn.shiro.mapper.PermMapper">
+    <sql id="fieldList">
+        pid,
+        pname,
+        ptype,
+        pval,
+        created,
+        updated
+    </sql>
+
+
+    <select id="getPermsByUid" resultType="String">
+        SELECT
+          pval
+        FROM
+        perm
+        LEFT JOIN role_perm
+        ON perm.pid = role_perm.pid
+        LEFT JOIN role
+        ON role_perm.rid = role.rid
+        WHERE
+        user.uid = #{uid}
+    </select>
+
+</mapper>

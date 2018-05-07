@@ -21,7 +21,8 @@ spring:
     remove-abandoned: true
     remove-abandoned-timeout-millis: 1200
     log-abandoned: true
-
+  profiles:
+    include: shiro
 #  http:
 #    encoding:
 #      force: true
@@ -46,4 +47,3 @@ server:
   port: 8888
   tomcat:
     uri-encoding: UTF-8
-

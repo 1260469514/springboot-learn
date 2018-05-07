@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hackdog.springbootlearn.shiro.mapper.RoleMapper">
+    <sql id="fieldList">
+        rid,
+        rname,
+        rdesc,
+        rval,
+        created,
+        updated
+    </sql>
+
+
+    <select id="getRolesByUid" resultType="String">
+        SELECT
+         rval
+        FROM
+        role
+        LEFT JOIN user_role
+        ON role.rid = user_role.rid
+        LEFT JOIN user
+        ON user_role.uid = user.uid
+        WHERE
+        user.uid = #{uid}
+    </select>
+
+</mapper>
